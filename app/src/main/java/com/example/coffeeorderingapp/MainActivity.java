@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
     int topping1_price=10, topping2_price = 15, topping_price = 0, number=0, billAmount=0;
@@ -37,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
         topping_price *= number;
         billAmount = topping_price + number*5;
         price.setText(String.valueOf(billAmount));
+        sendMail();
     }
 
     public void onCheckboxClicked(View view) {
@@ -61,13 +63,14 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void sendOrderSummaryAsMail() {
+    public void sendMail() {
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("text/plain");
         intent.putExtra(Intent.EXTRA_SUBJECT, "Coffee Ordering Details");
-        intent.putExtra(Intent.EXTRA_TEXT, String.valueOf(billAmount) + "hii");
+        intent.putExtra(Intent.EXTRA_TEXT, "Rs. " + String.valueOf(billAmount));
         if (intent.resolveActivity(getPackageManager()) != null) {
             startActivity(intent);
         }
+        Toast mail_send_successfully = Toast.makeText(this, "Mail Send Successfully", 1000);
     }
 }
