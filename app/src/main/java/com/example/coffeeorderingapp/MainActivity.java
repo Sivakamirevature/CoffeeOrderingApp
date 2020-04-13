@@ -2,13 +2,14 @@ package com.example.coffeeorderingapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
-
-    int number=0;
+    int topping1_price=10, topping2_price = 15, topping_price = 0, number=0, billAmount=0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,6 +34,40 @@ public class MainActivity extends AppCompatActivity {
     }
     public void displayPrice(){
         TextView price=(TextView)findViewById(R.id.priceTextView);
-        price.setText(String.valueOf(number*5));
+        topping_price *= number;
+        billAmount = topping_price + number*5;
+        price.setText(String.valueOf(billAmount));
+    }
+
+    public void onCheckboxClicked(View view) {
+        boolean checked = ((CheckBox) view).isChecked();
+        switch(view.getId()) {
+            case R.id.toping1:
+                if (checked) {
+                    topping_price += topping1_price;
+                }
+            else{
+                    topping_price -= topping1_price;
+                }
+                break;
+            case R.id.topping2:
+                if (checked){
+                    topping_price += topping2_price;
+                }
+            else{
+                    topping_price -= topping2_price;
+                }
+                break;
+        }
+    }
+
+    public void sendOrderSummaryAsMail() {
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("text/plain");
+        intent.putExtra(Intent.EXTRA_SUBJECT, "Coffee Ordering Details");
+        intent.putExtra(Intent.EXTRA_TEXT, String.valueOf(billAmount) + "hii");
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivity(intent);
+        }
     }
 }
